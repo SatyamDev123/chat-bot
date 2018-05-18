@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
 import './App.css';
+import ChatBot from './components/ChatBot/ChatBot';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <h1 className="App-title">Chat bot</h1>
-        </header>
-      </div>
+      <main className="app">
+        <ChatBot />
+      </main>
     );
   }
 }

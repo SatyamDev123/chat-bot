@@ -1,0 +1,16 @@
+.message {
+  padding: 5px;
+  box-shadow: 0 1px 0.5px rgba(0, 0, 0, 0.13);
+  border-radius: 7.5px;
+  margin-bottom: 5px;
+}
+
+.message.sent-message { 
+  align-self: flex-end;
+  background: #dcf8c6;
+}
+
+.message.received-message { 
+  align-self: flex-start;
+  background: white;
+}
