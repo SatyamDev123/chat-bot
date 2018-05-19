@@ -4,57 +4,61 @@ import Footer from './Footer/Footer';
 import MessageList from './MessageList/MessageList';
 import Navbar from './Navbar/Navbar';
 
-import ApiRequest from './../../shared/ApiRequest';
+import { 
+  sendMessage,
+  getSavedChatMessages,
+  saveChatMessages
+} from './../../shared/chat';
 
 import './ChatBot.css';
 
 class ChatBot extends Component {
 
   state = {
-    messageList: [],
+    messageList: getSavedChatMessages(),
+    sendingMessage: false,
     errorMsg: ''
-  }
-
-  scrollToBottom() {
-    const messageList = document.getElementsByClassName('message-list')[0];
-    messageList.scrollTop = messageList.scrollHeight;
   }
 
   onSubmit = value => {
     const { messageList } = this.state;
 
     this.setState({
-      messageList: [...messageList, {message: value, sent: true}]
+      messageList: [
+        ...messageList,
+        {message: value, sent: true}
+      ],
+      sendingMessage: true
     });
-    this.scrollToBottom();
 
-    ApiRequest
-      .get(`?apiKey=6nt5d1nJHkqbkphe&message=${value}&chatBotID=63906&externalID=chirag1`)
+    sendMessage(value)
       .then(({data: {success, message, errorMessage}}) => {
         if (success) {
           this.setState({
-            messageList: [...this.state.messageList, message]
+            messageList: [...this.state.messageList, message],
+            sendingMessage: false
           });
-          this.scrollToBottom();
+          // store message in local storage
+          saveChatMessages(this.state.messageList);
         } else {
           this.setState({
-            errorMsg: errorMessage
+            errorMsg: errorMessage,
+            sendingMessage: false
           });
         }
       })
-      .catch(error => {
-        this.setState({
-          errorMsg: error
-        });
-      });
   }
 
   render () {
+    const { messageList, sendingMessage } = this.state;
     return (
       <div className="chat-bot">
         <Navbar />
-        <MessageList messages={this.state.messageList}></MessageList>
-        <Footer onSubmit={this.onSubmit}></Footer>
+        <MessageList 
+          messages={this.state.messageList} 
+          sendingMessage={sendingMessage} 
+        />
+        <Footer onSubmit={this.onSubmit} />
       </div>
     )
   }
