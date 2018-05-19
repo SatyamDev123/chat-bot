@@ -4,14 +4,23 @@ import './MessageList.css';
 import Loader from './../../Loader/Loader';
 
 class MessageList extends Component {
-  
-  scrollToBottom() {
-    const messageList = document.querySelectorAll('.message-list')[0];
-    messageList.scrollTop = messageList.scrollHeight;
+
+  // scroll messages to bottom with animation
+  scrollToBottom(element, to, duration) {
+    if (duration <= 0) return;
+    const difference = to - element.scrollTop;
+    const perTick = difference / duration * 10;
+
+    setTimeout(() => {
+        element.scrollTop = element.scrollTop + perTick;
+        if (element.scrollTop === to) return;
+        this.scrollToBottom(element, to, duration - 10);
+    }, 10);
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    const messageList = document.querySelectorAll('.message-list')[0];
+    this.scrollToBottom(messageList, messageList.scrollHeight, 700)
   }
 
   render() {

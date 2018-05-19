@@ -3,7 +3,7 @@ import './Loader.css';
 
 export const Loader = (props) => {
   return(
-    <div id="loader">
+    <div className="loader">
         <span className="dot"></span>
         <span className="dot"></span>
         <span className="dot"></span>
